@@ -1,0 +1,44 @@
+﻿@inject HttpClient Http
+@inject CustomerDbContextFactory dbContextFactory;
+
+<h3>Kunden</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Guid</th>
+            <th>Name</th>
+            <th>Strasse</th>
+            <th>Stadt</th>
+        </tr>
+    </thead>
+    <tbody>
+        <Virtualize Context="item" ItemsProvider="LoadCustomer">
+            <ItemContent>
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.Street</td>
+                    <td>@item.City</td>
+                    <td>@item.Id</td>
+                </tr>
+            </ItemContent>
+            <Placeholder>
+                <p>
+                    Loading...
+                </p>
+            </Placeholder>
+        </Virtualize>
+    </tbody>
+</table>
+
+@code {
+    protected async ValueTask<ItemsProviderResult<Customer>> LoadCustomer(ItemsProviderRequest request)
+    {
+        using var db = dbContextFactory.BuildDbContext();
+
+        var totalCount = db.Customers.Count();
+        var customer = await db.Customers.Skip(request.StartIndex).Take(request.Count).ToArrayAsync();
+        StateHasChanged();
+        return new ItemsProviderResult<Customer>(customer, totalCount);
+    }
+}

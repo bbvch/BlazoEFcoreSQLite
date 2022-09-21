@@ -1,0 +1,72 @@
+﻿@page "/"
+@using BlazorLocalEFcore.CustomerCode
+@using Microsoft.Data.Sqlite
+@inject HttpClient Http
+@inject CustomerDbContextFactory dbContextFactory;
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<button @onclick="RunEfCore">Sync data from backend</button>
+<button @onclick="() => isShowData = true">Show data</button>
+
+<div>
+@if(isSynching)
+{
+    <a>Synchroniziere Daten ...</a>
+}
+else
+{
+    <a>Anzahl synchronisierter Kunden: @customerCount</a>
+}
+</div>
+
+@if (isShowData)
+{
+    <BlazorLocalEFcore.CustomerCode.CustomerSearchPage />
+}
+
+@code {
+    private bool isSynching = false;
+    private bool isShowData = false;
+    private int customerCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = dbContextFactory.BuildDbContext();
+        await db.Database.EnsureCreatedAsync();
+    }
+
+    private async Task RunEfCore()
+    {
+        isSynching = true;
+        isShowData = false;
+
+        using var db = dbContextFactory.BuildDbContext();
+        db.ChangeTracker.AutoDetectChangesEnabled = false;
+        db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        db.Database.OpenConnection();
+        await db.Database.EnsureCreatedAsync();
+
+        customerCount = db.Customers.Count();
+        var customerFromBackend = await Http.GetFromJsonAsync<IList<Customer>>("sample-data/customer.json") ?? new List<Customer>();
+        if (customerCount == 0)
+        {
+            db.Customers.AddRange(customerFromBackend.ToArray());
+        }
+        else
+        {
+            db.Customers.UpdateRange(customerFromBackend);
+        }
+        await db.SaveChangesAsync();
+
+        customerCount = db.Customers.Count();
+        db.Database.CloseConnection();
+        isSynching = false;
+    }
+}

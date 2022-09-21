@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLocalEFcore", "BlazorLocalEFcore\BlazorLocalEFcore.csproj", "{C6E7F678-4CCA-4D63-B17B-FB4785F25DDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB4455EA-FD11-4DE3-AC43-9165A8FF6D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4455EA-FD11-4DE3-AC43-9165A8FF6D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4455EA-FD11-4DE3-AC43-9165A8FF6D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4455EA-FD11-4DE3-AC43-9165A8FF6D15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE6BA4D-778B-46F2-AD8E-D9A0600F0EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE6BA4D-778B-46F2-AD8E-D9A0600F0EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE6BA4D-778B-46F2-AD8E-D9A0600F0EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE6BA4D-778B-46F2-AD8E-D9A0600F0EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E7F678-4CCA-4D63-B17B-FB4785F25DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E7F678-4CCA-4D63-B17B-FB4785F25DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E7F678-4CCA-4D63-B17B-FB4785F25DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E7F678-4CCA-4D63-B17B-FB4785F25DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BBE68DF-C6F0-4139-9D9A-476709BFAA6F}
+	EndGlobalSection
+EndGlobal
