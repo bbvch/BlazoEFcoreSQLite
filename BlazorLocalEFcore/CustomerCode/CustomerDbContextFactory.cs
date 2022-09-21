@@ -5,7 +5,7 @@ namespace BlazorLocalEFcore.CustomerCode
 {
     public class CustomerDbContextFactory
     {
-        private const string SqliteDbFilename = "customer.db";
+        public const string SqliteDbFilename = "customer.db";
         private readonly DbContextOptions<CustomerDbContext> options = null!;
 
         public CustomerDbContextFactory()

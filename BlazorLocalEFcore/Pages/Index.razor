@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using BlazorLocalEFcore.CustomerCode
 @using Microsoft.Data.Sqlite
+@using System.Runtime.InteropServices
 @inject HttpClient Http
-@inject CustomerDbContextFactory dbContextFactory;
+@inject CustomerDbContextFactory dbContextFactory
+@inject IJSRuntime js
 
 <PageTitle>Index</PageTitle>
 
@@ -12,7 +14,7 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-<button @onclick="RunEfCore">Sync data from backend</button>
+<button @onclick="SyncData">Sync data from backend</button>
 <button @onclick="() => isShowData = true">Show data</button>
 
 <div>
@@ -38,11 +40,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var module = await js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("browser")))
+        {
+            await module.InvokeVoidAsync("synchronizeFileWithIndexedDb", CustomerDbContextFactory.SqliteDbFilename);
+        }
+
         using var db = dbContextFactory.BuildDbContext();
         await db.Database.EnsureCreatedAsync();
+        customerCount = db.Customers.Count();
     }
 
-    private async Task RunEfCore()
+    private async Task SyncData()
     {
         isSynching = true;
         isShowData = false;
@@ -51,9 +61,7 @@ else
         db.ChangeTracker.AutoDetectChangesEnabled = false;
         db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         db.Database.OpenConnection();
-        await db.Database.EnsureCreatedAsync();
 
-        customerCount = db.Customers.Count();
         var customerFromBackend = await Http.GetFromJsonAsync<IList<Customer>>("sample-data/customer.json") ?? new List<Customer>();
         if (customerCount == 0)
         {
